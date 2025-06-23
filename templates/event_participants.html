@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Participants: {{ event.name }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: 150px auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        li:last-child {
+            margin-bottom: 0;
+        }
+
+        li strong {
+            font-weight: bold;
+            color: #555;
+        }
+
+        p {
+            color: #777;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Event Participants: {{ event.name }}</h1>
+        {% if participants %}
+            <ul>
+                {% for participant in participants %}
+                    <li>
+                        <strong>Name:</strong> {{ participant.name }}
+                    </li>
+                    <li>
+                        <strong>Reg. No:</strong> {{ participant.regno }}
+                    </li>
+                    <li>
+                        <strong>College:</strong> {{ participant.college }}
+                    </li>
+                    <li>
+                        <strong>Department:</strong> {{ participant.department }}
+                    </li>
+                    <li>
+                        <strong>Section:</strong> {{ participant.section }}
+                    </li>
+                    <li>
+                        <strong>Year:</strong> {{ participant.year }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No participants registered for this event yet.</p>
+        {% endif %}
+        <a href="{{url_for('login')}}">Back to Login</a>
+    </div>
+</body>
+</html>

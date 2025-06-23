@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Sponsors</title>
+</head>
+<body>
+    <h1>Our Sponsors</h1>
+    <ul>
+        {% for sponsor in sponsors %}
+        <li><a href="{{sponsor['link']}}">{{sponsor['name']}}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{url_for('index')}}">Home</a>
+</body>
+</html>

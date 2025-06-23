@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #c2e9f2);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .registration-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        select {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px; /* Add some space between buttons */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
+
+        #otp-section {
+            display: none; /* Initially hide the OTP section */
+        }
+    </style>
+    <script>
+        async function sendOTP() {
+            const name = document.getElementById('name').value;
+            const regno = document.getElementById('regno').value;
+            const age = document.getElementById('age').value;
+            const department = document.getElementById('department').value;
+            const section = document.getElementById('section').value;
+            const year = document.getElementById('year').value;
+            const college = document.getElementById('college').value;
+            const email = document.getElementById('email').value;
+            const eventId = {{ event.id }}; // Get event ID from Jinja
+
+            const response = await fetch('/send_otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    event_id: eventId // Send event ID
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.message === 'OTP sent successfully') {
+                document.getElementById('registration-form').style.display = 'none';
+                document.getElementById('otp-section').style.display = 'block';
+                // Store the initial registration data for verification
+                sessionStorage.setItem('registrationData', JSON.stringify({
+                    name: name,
+                    regno: regno,
+                    age: age,
+                    department: department,
+                    section: section,
+                    year: year,
+                    college: college,
+                    email: email,
+                    event_id: eventId
+                }));
+            } else {
+                alert(data.message || 'Failed to send OTP');
+            }
+        }
+
+        async function verifyOTP() {
+            const otp = document.getElementById('otp').value;
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData'));
+
+            if (!registrationData) {
+                alert('Registration data not found. Please try again.');
+                window.location.reload(); // Reload to restart the process
+                return;
+            }
+
+            const response = await fetch('/verify_otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    otp: otp,
+                    email: registrationData.email,
+                    event_id: registrationData.event_id,
+                    college: registrationData.college,
+                    name: registrationData.name,
+                    regno: registrationData.regno,
+                    age: registrationData.age,
+                    department: registrationData.department,
+                    section: registrationData.section,
+                    year: registrationData.year
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.message === 'Registration successful') {
+                alert('Registration successful!');
+                window.location.href = "{{ url_for('schedule') }}"; // Redirect to schedule
+            } else {
+                alert(data.message || 'Invalid OTP');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="registration-container">
+        <h1>Register for {{ event.name }}</h1>
+        <div id="registration-form">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" required><br>
+
+            <label for="regno">Registration Number:</label>
+            <input type="text" name="regno" id="regno" required><br>
+
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" required><br>
+
+            <label for="department">Department:</label>
+            <input type="text" name="department" id="department" required><br>
+
+            <label for="section">Section:</label>
+            <input type="text" name="section" id="section" required><br>
+
+            <label for="year">Year:</label>
+            <select name="year" id="year" required>
+                <option value="">Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select><br>
+
+            <label for="college">College Name:</label>
+            <input type="text" name="college" id="college" required><br>
+
+            <label for="email">Email Address:</label>
+            <input type="email" name="email" id="email" required><br>
+
+            <button type="button" onclick="sendOTP()">Register</button>
+        </div>
+
+        <div id="otp-section">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" name="otp" required><br>
+            <button type="button" onclick="verifyOTP()">Verify OTP</button>
+        </div>
+        <a href="{{url_for('schedule')}}" class="back-link">Back to Schedule</a>
+    </div>
+</body>
+</html>

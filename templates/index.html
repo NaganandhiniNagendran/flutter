@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Sports Fest</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('\run.jpg'); /* Path to your image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff; /* White text for better contrast */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1.5px;
+            background-color: rgba(0, 0, 0, 0.5); /* Optional: Add a background to the text for better readability */
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .date-display, .time-display {
+            font-size: 1em;
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent dark background */
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            position: absolute;
+        }
+
+        .date-display {
+            top: 20px;
+            left: 20px;
+        }
+
+        .time-display {
+            top: 20px;
+            right: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.5); /* Optional: Add a background to the text for better readability */
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .main-container a {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            background-color: #FFD700; /* Gold color for buttons */
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.1em;
+        }
+
+        .main-container a:hover {
+            background-color: #FFA000; /* Darker gold on hover */
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent dark container */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-container, h1, p, a, .date-display, .time-display {
+            animation: fadeInUp 1s ease-out;
+        }
+    </style>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString();
+            document.getElementById('currentTime').textContent = timeString;
+            document.getElementById('currentDate').textContent = dateString;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+    </script>
+</head>
+<body>
+    <div class="date-display" id="currentDate"></div>
+    <div class="time-display" id="currentTime"></div>
+    <div class="main-container">
+        <h1>Get Ready for the College Sports Fest!</h1>
+        <p>Experience the thrill, the competition, and the spirit of sports.</p>
+        <p>Join us for an unforgettable celebration of athleticism and teamwork.</p>
+        <div style="margin-top: 30px;">
+            <a href="{{ url_for('schedule') }}">Explore the Schedule</a>
+            <a href="{{ url_for('about') }}">Learn More About Us</a>
+            <a href="{{url_for('sponsor_page')}}">Meet Our Awesome Sponsors</a>
+            <a href="{{ url_for('login') }}">Add Event (Admin)</a>
+            
+        </div>
+    </div>
+</body>
+</html>

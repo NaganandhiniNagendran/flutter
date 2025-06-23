@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Schedule</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .schedule-container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #ffffff;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        li a {
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        li a:first-of-type {
+            background-color: #007bff;
+            color: white;
+        }
+
+        li a:first-of-type:hover {
+            background-color: #0056b3;
+        }
+
+        li a:last-of-type {
+            background-color: #28a745;
+            color: white;
+        }
+
+        li a:last-of-type:hover {
+            background-color: #218838;
+        }
+
+        .home-link, .add-event-link {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-link:hover, .add-event-link:hover {
+            background-color: #0056b3;
+        }
+
+        .add-event-link {
+            background-color: #6c757d;
+            margin-left: 10px;
+        }
+
+        .add-event-link:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="schedule-container">
+        <h1>Event Schedule</h1>
+        <ul>
+            {% for event in events %}
+            <li>
+                <span>{{ event.name }} - {{ event.date }} at {{ event.time }} in {{ event.location }}</span>
+                <div>
+                    <a href="{{ url_for('register', event_id=event.id) }}">Register</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{{url_for('index')}}" class="home-link">Home</a>
+        
+    </div>
+</body>
+</html>
